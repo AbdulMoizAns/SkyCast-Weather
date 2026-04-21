@@ -1,0 +1,6 @@
+{
+  "name": "Weather Dashboard",
+  "description": "A modern, responsive weather dashboard providing real-time updates and 5-day forecasts.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": []
+}
