@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your UI Style</title>
+    <style>
+        /* Base Variables */
+        :root {
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+            --card-bg: #fff;
+            --primary-color: #3b82f6;
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Theme: Modern (Default) */
+        body.theme-modern {
+            --bg-color: #f0f2f5;
+            --text-color: #1a1a1a;
+            --card-bg: #ffffff;
+            --primary-color: #2563eb;
+            --border-radius: 12px;
+            --font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        /* Theme: Minimalist */
+        body.theme-minimalist {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --card-bg: #ffffff;
+            --primary-color: #000000;
+            --border-radius: 0px;
+            --font-family: 'Helvetica Neue', Arial, sans-serif;
+            --shadow: none;
+            border: 1px solid #eee;
+        }
+
+        /* Theme: Dark/Cyber */
+        body.theme-dark {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --card-bg: #1e293b;
+            --primary-color: #38bdf8;
+            --border-radius: 4px;
+            --font-family: 'Courier New', monospace;
+        }
+
+        /* Theme: Colorful/Playful */
+        body.theme-colorful {
+            --bg-color: #fff0f5;
+            --text-color: #4a044e;
+            --card-bg: #ffe4e1;
+            --primary-color: #db2777;
+            --border-radius: 20px;
+            --font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.3s ease; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Overlay for Selection */
+        #theme-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .selection-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            color: var(--text-color);
+        }
+
+        .selection-card h2 { margin-bottom: 1.5rem; }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .theme-option {
+            padding: 1rem;
+            border: 2px solid transparent;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .theme-option:hover { transform: translateY(-3px); }
+        
+        .theme-option.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .btn-confirm {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .btn-confirm:hover { opacity: 0.9; }
+
+        /* Main Content (Hidden initially) */
+        #main-content {
+            display: none;
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .demo-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+
+        .reset-btn {
+            margin-top: 2rem;
+            background: transparent;
+            border: 1px solid var(--text-color);
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: var(--border-radius);
+        }
+    </style>
+</head>
+<body class="theme-modern">
+
+    <!-- Theme Selection Overlay -->
+    <div id="theme-overlay">
+        <div class="selection-card">
+            <h2>Choose Your Experience</h2>
+            <p style="margin-bottom: 1rem; opacity: 0.8;">How would you like this website to look?</p>
+            
+            <div class="options-grid">
+                <div class="theme-option" data-theme="theme-modern">Modern</div>
+                <div class="theme-option" data-theme="theme-minimalist">Minimal</div>
+                <div class="theme-option" data-theme="theme-dark">Dark</div>
+                <div class="theme-option" data-theme="theme-colorful">Playful</div>
+            </div>
+
+            <button class="btn-confirm" id="confirm-btn">Start Browsing</button>
+        </div>
+    </div>
+
+    <!-- Main Website Content -->
+    <div id="main-content">
+        <h1>Welcome to Our Website</h1>
+        <p>You have successfully selected your preferred UI style.</p>
+        
+        <div class="demo-card">
+            <h3>Sample Content Card</h3>
+            <p>This card demonstrates the typography, colors, and border radius of your chosen theme.</p>
+            <br>
+            <button class="btn-confirm" style="width: auto;">Call to Action</button>
+        </div>
+
+        <button class="reset-btn" onclick="resetTheme()">Change Style Later</button>
+    </div>
+
+    <script>
+        const overlay = document.getElementById('theme-overlay');
+        const mainContent = document.getElementById('main-content');
+        const options = document.querySelectorAll('.theme-option');
+        const confirmBtn = document.getElementById('confirm-btn');
+        let selectedTheme = 'theme-modern'; // Default
+
+        // Check if user already has a preference saved
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('userTheme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+                overlay.style.display = 'none';
+                mainContent.style.display = 'block';
+            } else {
+                // Select default visually
+                document.querySelector('[data-theme="theme-modern"]').classList.add('selected');
+            }
+        });
+
+        // Handle Option Click
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove selected class from all
+                options.forEach(opt => opt.classList.remove('selected'));
+                // Add to clicked
+                option.classList.add('selected');
+                selectedTheme = option.getAttribute('data-theme');
+            });
+        });
+
+        // Handle Confirm Click
+        confirmBtn.addEventListener('click', () => {
+            applyTheme(selectedTheme);
+            localStorage.setItem('userTheme', selectedTheme);
+            
+            // Fade out overlay
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                mainContent.style.display = 'block';
+            }, 300);
+        });
+
+        function applyTheme(themeName) {
+            document.body.className = themeName;
+        }
+
+        function resetTheme() {
+            localStorage.removeItem('userTheme');
+            location.reload();
+        }
+    </script>
+</body>
+</html>
