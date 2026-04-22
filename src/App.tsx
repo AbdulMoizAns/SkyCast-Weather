@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useWeather } from './hooks/useWeather';
 import { SearchBar } from './components/SearchBar';
 import { CurrentWeather } from './components/CurrentWeather';
 import { ForecastCard } from './components/ForecastCard';
-import { CloudRain, AlertCircle } from 'lucide-react';
+import { CloudRain, AlertCircle, Palette } from 'lucide-react';
+
+type ThemeType = 'modern' | 'minimal' | 'dark' | 'playful';
 
 export default function App() {
   const { 
@@ -15,15 +17,125 @@ export default function App() {
     getCurrentLocation, 
     toggleUnit 
   } = useWeather();
+  
+  const [selectedTheme, setSelectedTheme] = useState<ThemeType | null>(null);
+  const [showThemeModal, setShowThemeModal] = useState(false);
 
-  // Load default city on mount
   useEffect(() => {
-    searchCity('London');
+    // Check if theme is already selected
+    const savedTheme = localStorage.getItem('selectedTheme') as ThemeType | null;
+    if (savedTheme) {
+      setSelectedTheme(savedTheme);
+      searchCity('London');
+    } else {
+      setShowThemeModal(true);
+    }
   }, [searchCity]);
 
+  const handleThemeSelect = (theme: ThemeType) => {
+    setSelectedTheme(theme);
+    localStorage.setItem('selectedTheme', theme);
+    setShowThemeModal(false);
+    searchCity('London');
+  };
+
+  const getThemeClasses = () => {
+    switch (selectedTheme) {
+      case 'minimal':
+        return 'bg-gray-50 text-gray-900';
+      case 'dark':
+        return 'bg-gray-900 text-white';
+      case 'playful':
+        return 'bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 text-gray-800';
+      case 'modern':
+      default:
+        return 'text-white font-sans selection:bg-blue-500/30';
+    }
+  };
+
+  const getAtmosphereClasses = () => {
+    switch (selectedTheme) {
+      case 'minimal':
+        return 'bg-gray-200';
+      case 'dark':
+        return 'bg-black';
+      case 'playful':
+        return 'bg-gradient-to-br from-pink-300 via-purple-300 to-indigo-400';
+      case 'modern':
+      default:
+        return 'atmosphere';
+    }
+  };
+
+  if (showThemeModal) {
+    return (
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 max-w-2xl w-full shadow-2xl animate-in fade-in zoom-in duration-300">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-2xl mb-4">
+              <Palette className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Choose Your Style</h2>
+            <p className="text-gray-600 dark:text-gray-400">Select the UI/UX theme that best fits your preference</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Modern Theme */}
+            <button
+              onClick={() => handleThemeSelect('modern')}
+              className="group relative overflow-hidden rounded-2xl p-6 text-left transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-transparent hover:border-blue-500"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-purple-700 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative z-10">
+                <h3 className="text-xl font-bold text-white mb-2">Modern</h3>
+                <p className="text-blue-100 text-sm">Sleek gradients and glass morphism effects</p>
+              </div>
+            </button>
+
+            {/* Minimal Theme */}
+            <button
+              onClick={() => handleThemeSelect('minimal')}
+              className="group relative overflow-hidden rounded-2xl p-6 text-left transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-transparent hover:border-gray-400"
+            >
+              <div className="absolute inset-0 bg-gray-50 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative z-10">
+                <h3 className="text-xl font-bold text-gray-800 mb-2">Minimal</h3>
+                <p className="text-gray-600 text-sm">Clean, simple, and distraction-free design</p>
+              </div>
+            </button>
+
+            {/* Dark Theme */}
+            <button
+              onClick={() => handleThemeSelect('dark')}
+              className="group relative overflow-hidden rounded-2xl p-6 text-left transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-transparent hover:border-gray-700"
+            >
+              <div className="absolute inset-0 bg-gray-900 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative z-10">
+                <h3 className="text-xl font-bold text-white mb-2">Dark</h3>
+                <p className="text-gray-400 text-sm">Easy on the eyes with deep blacks</p>
+              </div>
+            </button>
+
+            {/* Playful Theme */}
+            <button
+              onClick={() => handleThemeSelect('playful')}
+              className="group relative overflow-hidden rounded-2xl p-6 text-left transition-all duration-300 hover:scale-105 hover:shadow-xl border-2 border-transparent hover:border-pink-400"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-400 via-purple-400 to-indigo-400 opacity-90 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative z-10">
+                <h3 className="text-xl font-bold text-white mb-2">Playful</h3>
+                <p className="text-purple-100 text-sm">Vibrant colors and cheerful design</p>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen text-white font-sans selection:bg-blue-500/30 relative overflow-hidden">
-      <div className="atmosphere"></div>
+    <div className={`min-h-screen relative overflow-hidden ${getThemeClasses()}`}>
+      <div className={`fixed inset-0 ${getAtmosphereClasses()}`} style={{ zIndex: -1 }}></div>
       
       <div className="max-w-[1024px] mx-auto h-screen p-4 md:p-10 overflow-y-auto md:overflow-hidden">
         <header className="hidden">
