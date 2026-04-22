@@ -1,8 +1,1 @@
-node_modules/
-build/
-dist/
-coverage/
-.DS_Store
-*.log
-.env*
-!.env.example
+Nothing needs to be added to .gitignore since only a single HTML file (`theme-selector.html`) was added, which is a source code file and should not be ignored.
