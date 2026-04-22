@@ -36,7 +36,7 @@ A modern, responsive weather dashboard featuring a stunning glassmorphism "Immer
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/skycast-weather-dashboard.git
+   git clone https://github.com/AbdulMoizAns/skycast-weather-dashboard.git
    cd skycast-weather-dashboard
    ```
 
